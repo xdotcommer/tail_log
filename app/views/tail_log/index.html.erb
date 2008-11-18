@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>TailLog for <%= params[:logfile] %></title>
+	<%= javascript_include_tag "prototype", "effects", "controls" %>
+	
+	<% if @refresh %>
+		<meta http-equiv="refresh" content="5"/> 	
+	<% end %>
+	
+	<style type="text/css" media="screen">
+		<%= render :partial => 'tail_log.css' %>
+	</style>
+
+	<script type="text/javascript" charset="utf-8">
+		<%= render :partial => 'tail_log.js' %>
+	</script>
+</head>
+
+<body>
+
+	<div class="tail_log">
+	
+		<form id="tail_log_form">
+			<div id='tail_log_toggle_refresh' class='<%= tail_log_refresh_class %>' onclick="TailLog.toggleRefresh();"> </div>
+			<div class="tail_log_filter">
+				Display the last <%= text_field_tag 'tail', @tail, :size => 3 %> lines of <%= select_tag 'logfile', options_for_select(@logfiles.map {|f| [f.split('/').last,f]}, @current) %> <%= submit_tag "SUBMIT" %>
+				<%= hidden_field_tag 'login', @login %>
+				<%= hidden_field_tag 'password', @password %>
+				<%= hidden_field_tag 'refresh', @refresh %>
+			</div>
+		</form>
+	
+		<hr/>
+		<div class="tail_log_results">
+			<table border="0" cellspacing="0" cellpadding="0" width='100%'>
+				<tr>
+					<th></th>
+					<th>Duration</th>
+					<th>IP</th>
+					<th>Method</th>
+					<th>Action</th>
+					<th>Url</th>
+					<th>Date</th>
+					<th>Time</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+
+			<% @log.entries.each_with_index do |entry, i| %>
+				<tr <%= 'class="tail_log_error"' unless entry.completed_index %>>
+					<td>
+						<div id='tail_log_toggle_<%= i %>' class="tail_log_toggle_plus" onclick="TailLog.toggleDetails(<%= i %>);"></div>
+					</td>
+					<td><%= link_to_function tail_log_format_float(entry.duration), "alert('#{tail_log_stats(entry)}');" %></td>
+					<td><%= entry.ip %></td>
+					<td><%= entry.method %></td>
+					<td><%= entry.page %></td>
+					<td>
+						<% unless entry.url.blank? %>
+							<%= link_to(entry.url, entry.url)  %>
+						<% end %>
+					</td>
+					<td><%= entry.date %></td>
+					<td><%= entry.time %></td>
+					<td nowrap><%= entry.status %></td>
+					<td><%= link_to_function("Params", "alert('#{entry.params}');") unless entry.params.blank? %>
+				</tr>
+	
+				
+				<tr class='tail_log_entry_<%= i %>' style='display: none'>
+					<td></td>
+					<td colspan=8 class='tail_log_entry'><%= @log.brief_for(entry).join('<br />') %></td>
+					<td></td>
+				</tr>
+			<% end %>
+			</table>
+		</div>
+	</div>
+</body>
