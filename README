@@ -1,13 +1,15 @@
-LogJammer
+TailLog
 =========
 
-Introduction goes here.
+TailLog is a Rails plugin that allows you to monitor log files without logging into the server, just by accessing the tail_log controller in your app.  
 
+The login and password requested may be set in environment.rb or initializers:
+TailLog.login    = "username"
+TailLog.password = "password"
 
-Example
+Access
 =======
 
-Example goes here.
+http://www.yourwebsite.com/tail_log
 
-
-Copyright (c) 2008 [name of plugin creator], released under the MIT license
+Copyright (c) 2008 Michael Cowden, released under the MIT license
