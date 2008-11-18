@@ -14,7 +14,7 @@ Login & Password
 =====================
 The login and password requested may be set in environment.rb or initializers:
 
-  TailLog.login    = "username" ;
+  TailLog.login    = "username"
   TailLog.password = "password"
 
 Accessing TailLog
