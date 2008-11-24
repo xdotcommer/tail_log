@@ -9,7 +9,7 @@ class TailLogController < ApplicationController
       @refresh  = ! params[:refresh].blank?
       @login    = params[:login]
       @password = params[:password]
-      @current  = params[:logfile] || @logfiles.first # production?
+      @current  = params[:logfile] || default_logfile(@logifiles) || @logfiles.first
       @log      = TailLog::Log.new(@current, {:tail => @tail})
       @log.process_file
     else
@@ -18,6 +18,11 @@ class TailLogController < ApplicationController
   end
   
   def login
+  end
+
+private
+  def default_logfile(logfiles)
+    logfiles.detect {|d| d =~ /\/production\.log$/}
   end
 end
 
