@@ -5,8 +5,7 @@ require File.join(File.dirname(__FILE__), '..', 'lib', 'entry')
 
 describe "TailLog::Entry" do
   before(@each) do
-    @init_array                            = [1, 'MyController#action', '121.1.1.99', '2008-11-16', '09:46:33', 'GET']
-    @start_index, @page, @ip, @date, @time = @init_array
+    @start_index, @page, @ip, @date, @time = [1, 'MyController#action', '121.1.1.99', '2008-11-16', '09:46:33', 'GET']
     @entry                                 = TailLog::Entry.new(@start_index, @page, @ip, @date, @time, @method)
     @entry.finish_index                    = 100
   end
