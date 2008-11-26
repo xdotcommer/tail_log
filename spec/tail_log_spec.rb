@@ -1,4 +1,7 @@
-require File.dirname(__FILE__) + '/../../../../spec/spec_helper'
+require 'activesupport'
+require File.join('file', 'tail')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'log')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'entry')
 
 LOGFILE = <<-EOF
 Rendering log_jammer/index
