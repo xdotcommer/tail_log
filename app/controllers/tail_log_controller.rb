@@ -1,5 +1,10 @@
+require 'null_logger'
+
 class TailLogController < ApplicationController
   layout nil
+  skip_filter filter_chain
+  filter_parameter_logging :password, :login # need to use POST not GET...
+  around_filter :no_log
   
   def index
     if params[:login] == TailLog.login && params[:password] == TailLog.password
@@ -16,12 +21,19 @@ class TailLogController < ApplicationController
     end
   end
   
-  def login
+  def logger(*args)
+    NullLogger.new
   end
 
 private
   def default_logfile(logfiles)
     logfiles.detect {|d| d =~ /\/production\.log$/}
+  end
+
+  def no_log
+    RAILS_DEFAULT_LOGGER.silence do
+      yield
+    end
   end
 end
 
